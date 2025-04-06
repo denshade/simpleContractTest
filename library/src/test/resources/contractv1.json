@@ -1,4 +1,5 @@
-[  {
+[
+  {
   "expectedInput": "",
   "expectedOutput": "CustomerData",
   "expectedState": "optionalStatename",

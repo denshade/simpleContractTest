@@ -1,11 +1,16 @@
 package info.thelaboflieven.contract.testing;
 
 
-public class Contract {
-    ContractParagraph[] contractParagraphList;
+import java.util.List;
 
-    public Contract(ContractParagraph[] contractParagraphList) {
+public class Contract {
+    private List<ContractParagraph> contractParagraphList;
+
+    public Contract(List<ContractParagraph> contractParagraphList) {
         this.contractParagraphList = contractParagraphList;
     }
 
+    public List<ContractParagraph> getContractParagraphList() {
+        return contractParagraphList;
+    }
 }

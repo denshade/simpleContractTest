@@ -1,13 +1,16 @@
 package info.thelaboflieven.contract.testing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ContractReader {
 
-    public static Contract fromFile(File file) throws JsonProcessingException, FileNotFoundException {
+    public static Contract fromFile(File file) throws FileNotFoundException {
         var inputStream = new FileInputStream(file);
         var objectMapper = new ObjectMapper();
         StringBuilder resultStringBuilder = new StringBuilder();
@@ -17,7 +20,19 @@ public class ContractReader {
             while ((line = br.readLine()) != null) {
                 resultStringBuilder.append(line).append("\n");
             }
-            objectMapper.readValue(resultStringBuilder.toString(), Contract.class);
+            TypeReference<List<HashMap<String,String>>> typeRef
+                    = new TypeReference<>() {
+            };
+            var list = objectMapper.readValue(resultStringBuilder.toString(), typeRef);
+            var paragraphs = list.stream().map(e -> new ContractParagraph(
+                    e.get("expectedInput"),
+                    e.get("expectedOutput"),
+                    e.get("expectedEndpointUrlSuffix"),
+                    e.get("expectedEndpointVerb"),
+                    e.get("expectedState"),
+                    e.get("expectedEndpointCode")
+                    )).collect(Collectors.toList());
+            return new Contract(paragraphs);
         } catch (IOException e) {
             e.printStackTrace();
         }
