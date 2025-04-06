@@ -1,0 +1,9 @@
+[  {
+  "expectedInput": "",
+  "expectedOutput": "CustomerData",
+  "expectedState": "optionalStatename",
+  "expectedEndpointUrlSuffix" : "/v1/customers",
+  "expectedEndpointVerb" : "GET",
+  "expectedEndpointCode" : "200"
+}
+]
