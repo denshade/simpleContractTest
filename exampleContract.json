@@ -1,0 +1,11 @@
+
+[
+  {
+    "expectedInput": "",
+    "expectedOutput": "[{\"customerName\": \"name\",\"customerAddress\": \"AddressStreet 12, 47856 Aze\"}]",
+    "expectedState": "oneCustomerAvailable",
+    "expectedEndpointUrlSuffix" : "/v1/customers",
+    "expectedEndpointVerb" : "GET",
+    "expectedEndpointCode" : "200"
+  }
+]
