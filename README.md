@@ -5,7 +5,12 @@ You use a file broker.
 Store/update your contracts in a json file on a shared github/gitlab repository. 
 
 Each contract contains multiple contract paragraphs.
-Each contract contract consists of: 
+Each contract paragraph consists of: 
+* URL details
+* expected status code
+
+
+```
 {
 "contractsVersion": "1.2.3"
 "contractParagraphs":[ 
@@ -19,3 +24,4 @@ Each contract contract consists of:
   }
 ]
 }
+```
