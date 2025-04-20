@@ -1,24 +1,53 @@
 package info.thelaboflieven.contract.testing;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import info.thelaboflieven.contract.example.client.SimpleHttpClient;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ExampleCustomerConsumerContractTest {
+    private static WireMockServer wireMockServer;
 
-    @Test
-    void checkConsumerCustomerTests() throws IOException {
-        var contract = ContractReader.fromFile(new File("..\\exampleContract.json"));
-        for (var paragraph : contract.getFilteredParagraphs("/v1/customer")) {
-            assertRequestHandledCorrectly(paragraph.getExpectedUrl(), paragraph.getExpectedOutput(), paragraph.getExpectedInput(), paragraph.getExpectedHTTPVerb(), paragraph.getExpectedEndpointCode() );
-        }
+    @BeforeAll
+    static void setup() {
+        try {
+            var contract = ContractReader.fromFile(new File("..\\exampleContract.json"));
+
+            wireMockServer = new WireMockServer(options().dynamicPort());
+            wireMockServer.start();
+
+            // Configure mappings
+            configureFor("localhost", wireMockServer.port());
+
+            // Add mock responses
+            for (var paragraph : contract.getContractParagraphList()) {
+                wireMockServer.stubFor(get(urlEqualTo(paragraph.getExpectedUrl()))
+                        .willReturn(aResponse()
+                                .withHeader("Content-Type", "application/json")
+                                .withStatus(paragraph.getExpectedEndpointCode())
+                                .withBody(paragraph.getExpectedOutput())));
+            }
+            } catch(Exception e) {
+                throw new RuntimeException(e);
+            }
+
     }
 
-    void assertRequestHandledCorrectly(String url, String output, String input, String verb, int httpStatusCode) {
-        //when I call with verb, url with input
-        // and the httpStatus is httpStatusCode
-        // Check if this application can handle output
+    @Test
+    void checkCustomers() throws MalformedURLException {
+        var client = new SimpleHttpClient(new URL("http://localhost:"+wireMockServer.port()));
+        assertEquals("[{\"customerName\": \"name\",\"customerAddress\": \"AddressStreet 12, 47856 Aze\"}]", client.getCustomers());
     }
 
 }
