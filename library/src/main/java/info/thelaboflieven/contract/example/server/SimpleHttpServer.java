@@ -10,13 +10,13 @@ import java.net.InetSocketAddress;
 public class SimpleHttpServer {
 
     public static void main(String[] args) {
-        startHttpThread();
+        startHttpThread(8000);
     }
 
-    public static void startHttpThread() {
+    public static void startHttpThread(int port) {
         try {
             // Create an HTTP server listening on port 8000
-            HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
             // Define a context that will handle requests to the root path ("/")
             server.createContext("/v1/customers", new MyHandler());

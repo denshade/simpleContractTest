@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ExampleCustomerProviderContractTest {
 
+    private static final int PORT = 8000;
+
     private class ExampleReponse {
         private final String output;
         private final int httpStatusCode;
@@ -51,8 +53,8 @@ public class ExampleCustomerProviderContractTest {
     ExampleReponse handleResponse(String urlSuffix, String verb) {
         try{
             ExecutorService executor = Executors.newCachedThreadPool();
-            executor.submit(SimpleHttpServer::startHttpThread);
-            URL url = new URL("http://localhost:8000" + urlSuffix);
+            executor.submit(() -> SimpleHttpServer.startHttpThread(PORT));
+            URL url = new URL("http://localhost:"+ PORT + urlSuffix);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(verb);
 
