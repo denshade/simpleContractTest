@@ -3,6 +3,7 @@ package info.thelaboflieven.contract.example.client;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 public class CustomerServiceClient {
@@ -15,7 +16,7 @@ public class CustomerServiceClient {
 
     public String getCustomers() {
         try {
-            URL url = new URL(baseUrl+"/v1/customers");
+            URL url = new URI(baseUrl+"/v1/customers").toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             int responseCode = connection.getResponseCode();
