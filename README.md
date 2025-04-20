@@ -25,3 +25,7 @@ Each contract paragraph consists of:
 ]
 }
 ```
+
+Check ExampleCustomerProviderContractTest for provider contract tests.
+
+Check ExampleCustomerConsumerContractTest for consumer contract tests.
