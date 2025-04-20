@@ -18,9 +18,9 @@ public class ExampleCustomerProviderContractTest {
 
     private class ExampleReponse {
         private final String output;
-        private final String httpStatusCode;
+        private final int httpStatusCode;
 
-        ExampleReponse(String output, String httpStatusCode) {
+        ExampleReponse(String output, int httpStatusCode) {
             this.output = output;
             this.httpStatusCode = httpStatusCode;
         }
@@ -30,25 +30,25 @@ public class ExampleCustomerProviderContractTest {
     void checkConsumerCustomerTests() throws IOException {
         var contract = ContractReader.fromFile(new File("..\\exampleContract.json"));
         for (var paragraph : contract.getFilteredParagraphs("/v1/customers")) {
-            assertRequestHandledCorrectly(paragraph.getExpectedUrl(), paragraph.getExpectedOutput(), paragraph.getExpectedInput(), paragraph.getExpectedHTTPVerb(), paragraph.getExpectedEndpointCode(), paragraph.getExpectedState());
+            assertRequestHandledCorrectly(paragraph.getExpectedUrl(), paragraph.getExpectedOutput(), paragraph.getExpectedHTTPVerb(), paragraph.getExpectedEndpointCode(), paragraph.getExpectedState());
         }
     }
 
-    void assertRequestHandledCorrectly(String url, String output, String input, String verb, String httpStatusCode, String state) {
+    void assertRequestHandledCorrectly(String url, String output, String verb, int httpStatusCode, String state) {
         if ("oneCustomerAvailable".equals(state)) {
-            assertCustomerRequest(url, output, input, verb, httpStatusCode, state);
+            assertCustomerRequest(url, output, verb, httpStatusCode);
         }
     }
 
-    void assertCustomerRequest(String url, String output, String input, String verb, String httpStatusCode, String state) {
+    void assertCustomerRequest(String url, String output, String verb, int httpStatusCode) {
         // Setup state
         var expectedRespectedResponseBody = output;
-        var response = handleResponse(url, output, input, verb, httpStatusCode, state);
+        var response = handleResponse(url, verb);
         assertEquals(expectedRespectedResponseBody, response.output);
         assertEquals(httpStatusCode, response.httpStatusCode);
     }
 
-    ExampleReponse handleResponse(String urlSuffix, String output, String input, String verb, String httpStatusCode, String state) {
+    ExampleReponse handleResponse(String urlSuffix, String verb) {
         try{
             ExecutorService executor = Executors.newCachedThreadPool();
             executor.submit(SimpleHttpServer::startHttpThread);
@@ -57,14 +57,12 @@ public class ExampleCustomerProviderContractTest {
             connection.setRequestMethod(verb);
 
             int responseCode = connection.getResponseCode();
-            assertEquals(200, responseCode);
-
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder content = getContent(in);
             in.close();
             connection.disconnect();
             executor.shutdown();
-            return new ExampleReponse(content.toString(), httpStatusCode);
+            return new ExampleReponse(content.toString(), responseCode);
         } catch (Exception exception) {
             return null;
         }

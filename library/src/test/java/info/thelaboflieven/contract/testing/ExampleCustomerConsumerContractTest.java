@@ -15,7 +15,7 @@ public class ExampleCustomerConsumerContractTest {
         }
     }
 
-    void assertRequestHandledCorrectly(String url, String output, String input, String verb, String httpStatusCode) {
+    void assertRequestHandledCorrectly(String url, String output, String input, String verb, int httpStatusCode) {
         //when I call with verb, url with input
         // and the httpStatus is httpStatusCode
         // Check if this application can handle output

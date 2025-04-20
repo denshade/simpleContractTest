@@ -30,7 +30,7 @@ public class ContractReader {
                     e.get("expectedEndpointUrlSuffix"),
                     e.get("expectedEndpointVerb"),
                     e.get("expectedState"),
-                    e.get("expectedEndpointCode")
+                    Integer.parseInt(e.get("expectedEndpointCode"))
                     )).collect(Collectors.toList());
             return new Contract(paragraphs);
         } catch (IOException e) {

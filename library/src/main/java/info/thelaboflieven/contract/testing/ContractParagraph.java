@@ -6,9 +6,9 @@ public class ContractParagraph {
     private final String expectedUrl;
     private final String expectedHTTPVerb;
     private final String expectedState;
-    private final String expectedEndpointCode;
+    private final int expectedEndpointCode;
 
-    public ContractParagraph(String expectedInput, String expectedOutput, String expectedUrl, String expectedHTTPVerb, String expectedState, String expectedEndpointCode) {
+    public ContractParagraph(String expectedInput, String expectedOutput, String expectedUrl, String expectedHTTPVerb, String expectedState, int expectedEndpointCode) {
         this.expectedInput = expectedInput;
         this.expectedOutput = expectedOutput;
         this.expectedUrl = expectedUrl;
@@ -39,7 +39,7 @@ public class ContractParagraph {
     }
 
 
-    public String getExpectedEndpointCode() {
+    public int getExpectedEndpointCode() {
         return expectedEndpointCode;
     }
 }
