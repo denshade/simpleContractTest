@@ -1,6 +1,6 @@
 package info.thelaboflieven.contract.testing;
 
-import info.thelaboflieven.contract.example.client.SimpleHttpClient;
+import info.thelaboflieven.contract.example.client.CustomerServiceClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class ExampleCustomerConsumerContractTest {
 
     @Test
     void checkCustomers() throws MalformedURLException {
-        var client = new SimpleHttpClient(new URL("http://localhost:"+wireMockPort));
+        var client = new CustomerServiceClient(new URL("http://localhost:"+wireMockPort));
         assertEquals("[{\"customerName\": \"name\",\"customerAddress\": \"AddressStreet 12, 47856 Aze\"}]", client.getCustomers());
     }
 
