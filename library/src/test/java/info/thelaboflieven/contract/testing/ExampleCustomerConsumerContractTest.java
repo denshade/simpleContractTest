@@ -1,6 +1,5 @@
 package info.thelaboflieven.contract.testing;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import info.thelaboflieven.contract.example.client.SimpleHttpClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
